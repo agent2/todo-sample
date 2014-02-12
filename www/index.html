@@ -10,256 +10,88 @@
     <script src="js/ionic.js"></script>
     <script src="js/ionic-angular.js"></script>
 
-    <!-- AngularFire Extensions 
+    <!-- AngularFire Extensions -->
     <script src="https://cdn.firebase.com/v0/firebase.js"></script>
     <script src="https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js"></script>
-    -->
-    
-    <!-- Firebase login 
-    <script src='https://cdn.firebase.com/js/simple-login/1.2.5/firebase-simple-login.js'></script>
-    -->
-    
-    
+
+
     <!-- Needed for Cordova/PhoneGap -->
-	<script type="text/javascript" src="cordova.js"></script>
- 
-    <script type="text/javascript" src="js/navapp.js"></script>
-    <script type="text/javascript" src="js/camera.js"></script>
-    
+    <script type="text/javascript" src="cordova.js"></script>
+    <script src="js/app.js"></script>
+
   </head>
-    <body ng-app="navApp">
+  <body ng-app="todo" ng-controller="TodoCtrl">
+<side-menus>
+
+    <!-- Center content -->
+    <pane side-menu-content>
+        <header class="bar bar-header bar-dark">
+            <button class="button button-icon" ng-click="toggleProjects()">
+                <i class="icon ion-navicon"></i>
+            </button>
+            <h1 class="title">{{user.lastproject}}</h1>
+            <!-- New Task button-->
+            <button class="button button-clear" ng-click="newTask()">
+                New
+            </button>
+        </header>
+        <content has-header="true" scroll="false">
+            <list>
+                <item ng-repeat="task in projectsList[user.lastproject]">
+                    {{task}}
+                </item>
+            </list>
+        </content>
+    </pane>
+
+    <!-- Left menu -->
+    <side-menu side="left">
+        <header class="bar bar-header bar-dark">
+            <h1 class="title">Projects</h1>
+            <button class="button button-icon" ng-click="newProject()">
+                <i class="ion ion-plus"></i>
+            </button>
+        </header>
+        <content has-header="true" scroll="false">
+            <list>
+            <item ng-repeat="(name, project) in projectsList" ng-click="selectProject(name)" ng-class="{active: user.    lastproject == project}">
+                    {{name}}
+                </item>
+            </list>
+        </content>
+    </side-menu>
 
 
-	<tabs tabs-type="tabs-icon-only">
+    <script id="new-task.html" type="text/ng-template">
 
-	  <tab title="Home" icon-on="icon ion-home" icon-off="icon ion-home">
-		 <header-bar type="bar-positive" title="'Home'"></header-bar>
-		    <content has-header="true">
-		      <h2>Home</h2>
-	  	     	<p>Your published feed</p>
-				<p>Your events</p>
-		    </content>
-	  </tab>
+        <div class="modal">
 
-	  <tab title="World" icon-on="icon ion-ios7-world" icon-off="icon ion-ios7-world-outline">
-		
-		<div ng-controller="NavCtrl">
-		 <header-bar 
-			type="bar-positive" 
-		 	right-buttons="rightButtons"
-			title="'WedBugs World'">
-		</header-bar>
-		</div>
-		
-		    <content has-header="true">
-		    
-				<div class="list card">
+            <!-- Modal header bar -->
+            <header class="bar bar-header bar-secondary">
+                <h1 class="title">New Task</h1>
+                <button class="button button-clear button-primary" ng-click="closeNewTask()">Cancel</button>
+            </header>
 
-				  <div class="item item-avatar">
-				    <img src="http://d2qrzogz0i47rn.cloudfront.net/uploads/celebrities/avatar/10/justin-bieber-avatar.png">
-				    <h2>Marty McFly</h2>
-				    <p>November 05, 1955</p>
-				  </div>
+            <!-- Modal content area -->
+            <content has-header="true">
 
-				  <div class="item item-body">
-				    <img class="full-image" src="http://orchardridgefarms.com/weddingblog/wp-content/uploads/2013/05/Alex-Martin-2-Ceremony-0111-268x268.jpg">
-				    <p>
-				      This is a "Facebook" styled Card. The header is created from a Thumbnail List item,
-				      the content is from a card-body consisting of an image and paragraph text. The footer
-				      consists of tabs, icons aligned left, within the card-footer.
-				    </p>
-				    <p>
-				      <a href="#" class="subdued">1 Like</a>
-				      <a href="#" class="subdued">5 Comments</a>
-				    </p>
-				  </div>
+                <form ng-submit="createTask(task)">
+                    <div class="list">
+                        <label class="item item-input">
+                            <input type="text" placeholder="What do you need to do?" ng-model="task.title">
+                        </label>
+                    </div>
+                    <div class="padding">
+                        <button type="submit" class="button button-full button-primary">Create Task</button>
+                    </div>
+                </form>
 
-				  <div class="item tabs tabs-secondary tabs-icon-left">
-				    <a class="tab-item" href="#">
-				      <i class="icon ion-thumbsup"></i>
-				      Like
-				    </a>
-				    <a class="tab-item" href="#">
-				      <i class="icon ion-chatbox"></i>
-				      Comment
-				    </a>
-				    <a class="tab-item" href="#">
-				      <i class="icon ion-share"></i>
-				      Share
-				    </a>
-				  </div>
+            </content>
 
-				</div>
+        </div>
 
-				<div class="list card">
+    </script>
 
-				  <div class="item item-avatar">
-				    <img src="http://d2qrzogz0i47rn.cloudfront.net/uploads/celebrities/avatar/10/justin-bieber-avatar.png">
-				    <h2>Marty McFly</h2>
-				    <p>November 05, 1955</p>
-				  </div>
-
-				  <div class="item item-body">
-				    <img class="full-image" src="http://percysales.com/sitebuilder/images/websiteentry2-268x268.jpg">
-				    <p>
-				      This is a "Facebook" styled Card. The header is created from a Thumbnail List item,
-				      the content is from a card-body consisting of an image and paragraph text. The footer
-				      consists of tabs, icons aligned left, within the card-footer.
-				    </p>
-				    <p>
-				      <a href="#" class="subdued">1 Like</a>
-				      <a href="#" class="subdued">5 Comments</a>
-				    </p>
-				  </div>
-
-				  <div class="item tabs tabs-secondary tabs-icon-left">
-				    <a class="tab-item" href="#">
-				      <i class="icon ion-thumbsup"></i>
-				      Like
-				    </a>
-				    <a class="tab-item" href="#">
-				      <i class="icon ion-chatbox"></i>
-				      Comment
-				    </a>
-				    <a class="tab-item" href="#">
-				      <i class="icon ion-share"></i>
-				      Share
-				    </a>
-				  </div>
-
-				</div>
-		
-		<p style="padding: 15px;"></p>
-		</content>
-	  </tab>
-
-	  <tab title="Camera" icon-on="icon ion-ios7-camera" icon-off="icon ion-ios7-camera-outline">
-		 <header-bar type="bar-positive" title="'Camera'"></header-bar>
-		    <content has-header="true">
-		      <button onclick="capturePhoto();">Capture Photo</button> <br>
-			    <button onclick="capturePhotoEdit();">Capture Editable Photo</button> <br>
-			    <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
-			    <button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br>
-			    <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
-			    <img style="display:none;" id="largeImage" src="" />
-		    </content>
-	  </tab>
-
-	  <tab title="People" icon-on="icon ion-ios7-people" icon-off="icon ion-ios7-people-outline">
-		 <header-bar type="bar-positive" title="'Colleagues and Followers'"></header-bar>
-		    <content has-header="true">
-		
-			<div class="list">
-
-			    <a class="item item-avatar" href="#">
-			      <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_40_40/p/5/005/02e/354/0c3e9ee.jpg">
-			      <h2>Bob</h2>
-			      <p>Professional</p>
-				  <p>Status: <strong> Following </strong></p>
-				
-			    </a>
-
-			    <a class="item item-avatar" href="#">
-			      <img src="http://s3-media3.ak.yelpcdn.com/photo/MNDCy3oJbEehIgtCy_g_SA/ss.jpg">
-			      <h2>Sample</h2>
-			      <p>Wanna Bee</p>
-				  <p>Status: <strong> Following </strong></p>
-
-			    </a>
-
-			    <a class="item item-avatar" href="#">
-			      <img src="http://s3-media2.ak.yelpcdn.com/photo/bo8-dxZgXE9oPLBzGhTmnA/ss.jpg">
-			      <h2>Lynn</h2>
-			      <p>Wanna Bee</p>
-				  <p>Status: <strong> Colleague </strong></p>
-
-			    </a>
-
-			    <a class="item item-avatar" href="#">
-			      <img src="http://l.yimg.com/ck/user/A7642/76423/40_76423-17.jpg">
-			      <h2>James</h2>
-			      <p>Professional</p>
-				  <p>Status: <strong> Following </strong></p>
-
-			    </a>
-
-			    <a class="item item-avatar" href="#">
-			      <img src="http://www.luxury-reporters.com/wp-content/uploads/2014/01/Roberto-Coin-2014-new-face-40x40.jpg">
-			      <h2>Alexis</h2>
-			      <p>Professional</p>
-				  <p>Status: <strong> Colleague </strong></p>
-			
-			    </a>
-
-			</div>
-			<p style="padding: 15px;"></p>
-			
-		    </content>
-	  </tab>
-	
-	  <tab title="Settings" icon-on="icon ion-ios7-gear" icon-off="icon ion-ios7-gear-outline">
-		 <header-bar type="bar-positive" title="'Profile &amp; Settings'"></header-bar>
-		    <content has-header="true">
-			<div class="list">
-				<div class="item item-divider">
-				    Personal
-				</div>
-			  <a class="item item-icon-left" href="#">
-			    <i class="icon ion-person"></i>
-			    Name
-			  </a>
-
-			  <a class="item item-icon-left" href="#">
-			    <i class="icon ion-at"></i>
-			    Email Address
-			  </a>
-
-			  <a class="item item-icon-left" href="#">
-			    <i class="icon ion-speedometer"></i>
-			    Account Status
-			  </a>
-
-			  <a class="item item-icon-left" href="#">
-			    <i class="icon ion-person-add"></i>
-			    Friends...
-			  </a>
-
-
-			<div class="item item-divider">
-			    Settings
-			  </div>
-
-			  <a class="item item-icon-left item-icon-right" href="#">
-				<i class="icon ion-images"></i>
-			   	<label class="checkbox icon ">
-				       <input type="checkbox">
-				     </label>
-				     Keep Original Image
-			  </a>
-
-			  <a class="item item-icon-left item-icon-right" href="#">
-				<i class="icon ion-volume-medium"></i>
-			   	<label class="checkbox icon ">
-				       <input type="checkbox">
-				     </label>
-				     Toggle Sound
-			  </a>
-
-			  <a class="item item-icon-right" href="#">
-			    <i class="icon ion-power"></i>
-			    Log Out
-			  </a>
-			
-			<p style="padding: 15px;"></p>
-
-			</div>
-			
-			
-		    </content>	  
-	  </tab>
-
-	</tabs>
-      
-      
-  </body>
+</side-menus>
+</body>
 </html>
