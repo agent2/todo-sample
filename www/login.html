@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Todo</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" href="css/ionic.css">
+
+    <script src="js/ionic.js"></script>
+    <script src="js/ionic-angular.js"></script>
+
+    <!-- AngularFire Extensions -->
+    <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js"></script>
+
+    <!-- Firebase login -->
+    <script src='https://cdn.firebase.com/js/simple-login/1.2.5/firebase-simple-login.js'></script>
+
+    <!-- Needed for Cordova/PhoneGap -->
+    <!-- <script type="text/javascript" src="cordova.js"></script> -->
+    <script src="js/login.js"></script>
+
+  </head>
+    <body ng-app="login" ng-controller="LoginCtrl">
+      <header-bar title="'Header'" class="bar bar-header bar-positive">
+      </header-bar>   
+      <!-- content area -->
+      <content
+               has-header="true"
+               has-footer="true"
+               scroll="true"
+               on-refresh="onRefresh()"
+               >
+        
+        <!-- for pull to refresh -->
+        <refresher></refresher>
+        <button class="button button-positive" ng-click="auth.login('facebook')">
+          Login with Facebook
+        </button>
+      
+        <button class="button button-positive" ng-click="auth.logout()">
+          Logout!
+        </button>        
+        
+        <!-- content -->
+      </content>
+      
+      <footer-bar>
+        <h1 class="title">Footer</h1>
+      </footer-bar>
+    </body>
+</html>
