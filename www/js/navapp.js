@@ -1,31 +1,22 @@
 angular.module('navApp', ['ionic'])
 
-.config(function($stateProvider, $urlRouterProvider) {
+.controller('NavCtrl', function($scope) {
+  $scope.$on('tab.shown', function() {
+    // Maybe load some content here
+  });
+  $scope.$on('tab.hidden', function() {
+    // Perhaps cycle out some data in memory here
+  });
 
-  $stateProvider
-    .state('home', {
-      url: "/home",
-      templateUrl: "home.html",
-      controller: 'HomeCtrl'
-    })
-    .state('about', {
-      url: "/about",
-      templateUrl: "about.html",
-      controller: 'AboutCtrl'
-    })
-    .state('contact', {
-      url: "/contact",
-      templateUrl: "contact.html"
-    })
+  $scope.leftButtons = [
+    { 
+      text: 'Previous',
+	  type: 'button-positive',
+	  content: '<i class="icon ion-navicon"></i>',
+      click: function(e) {
+        console.log('Click button');
+      }
+    }
+  ]
 
-    // if none of the above are matched, go to this one
-    $urlRouterProvider.otherwise("/home");
-})
-
-.controller('HomeCtrl', function($scope) {
-  console.log('HomeCtrl');
-})
-
-.controller('AboutCtrl', function($scope) {
-  console.log('AboutCtrl');
 });
