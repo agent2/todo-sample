@@ -12,4 +12,7 @@
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
-  </widget>
+
+	<gap:plugin name="org.apache.cordova.camera" />
+  
+</widget>
